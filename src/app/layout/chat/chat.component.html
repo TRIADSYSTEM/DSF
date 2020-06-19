@@ -1,0 +1,110 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <a class="icon-left" (click)="voltarHome()" style="cursor: pointer">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h6 class="title">Chat</h6>
+  </div>
+  <hr class="row">
+</div>
+<!-- CAMINHO DE PAO -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb position tamanhoFonte">
+    <li class="breadcrumb-item position-route" style="cursor: pointer"><a (click)="voltarHome()">Home</a></li>
+    <li class="breadcrumb-item"><a>Chat</a></li>
+  </ol>
+</nav>
+<!--CONTEUDO DA PAGINA-->
+<div style="padding: 1.5%;">
+  <!-- TELA DO CHAT -->
+  <div *ngFor="let chatTicket of listaChat">
+    <!--Chat recebido -->
+    <div *ngIf="chatTicket.idUsuario == idUsuario" class="card card-message">
+      <div class="media message">
+        <div class="media-body">
+          <h5 class="mt-2 user-name">
+            <b class="userTitle">{{ chatTicket.nomeUsuario }}</b>
+            <div class="date-message">{{ chatTicket.data | date:'dd/MM/yy HH:mm' }}</div>
+          </h5>
+          <p class="message-user">
+            {{ chatTicket.conteudo }}
+            <i class="fa fa-arrow-circle-down icone_download" aria-hidden="true" *ngIf="chatTicket.habilitarDownload"
+              (click)="baixarItem(chatTicket.idChat, chatTicket.conteudo)"></i>
+          </p>
+        </div>
+        <i class="icon-message fa fa-user align-self-start mr-3" alt="..."></i>
+      </div>
+      <div class="triangle-right"></div>
+    </div>
+    <!--Chat enviado -->
+    <div *ngIf="chatTicket.idUsuario != idUsuario" class="card card-message-other-user">
+      <div class="media message">
+        <i class="icon-message-other-user fa fa-user align-self-start mr-3" alt="..."></i>
+        <div class="media-body">
+          <h5 class="mt-2 user-name-other-user">
+            <b>{{ chatTicket.nomeUsuario }}</b>
+            <div class="date-message-other-user">{{ chatTicket.data | date:'dd/MM/yy HH:mm' }}</div>
+          </h5>
+          <p class="message-user-other-user">
+            {{ chatTicket.conteudo  }}
+            <i class="fa fa-arrow-circle-down icone_download" aria-hidden="true" *ngIf="chatTicket.habilitarDownload"
+              (click)="baixarItem(chatTicket.idChat, chatTicket.conteudo)"></i>
+          </p>
+        </div>
+      </div>
+      <div class="triangle-left"></div>
+    </div>
+  </div>
+  <div class="alert alert-warning mensagem" role="alert" *ngIf="listaChat?.length == 0">
+    Não há nenhum comentário para este chamado.
+  </div>
+  <!-- Mensagem erro carregamento -->
+  <div class="alert alert-danger mensagem" role="alert" *ngIf="mensagemChat">
+    {{ mensagemChat }}
+  </div>
+  <!-- Formulario -->
+  <form class="needs-validation" [formGroup]="formulario" novalidate>
+    <!--Local onde é informado a mensagem para ser enviada-->
+    <textarea class="form-control" id="content" name="content" placeholder="Escreva aqui seu comentario"
+      formControlName="content">
+    </textarea>
+    <!-- UPLOAD ARQUIVO -->
+    <div class="input-group mb-3" style="margin-top: 4%;">
+      <div class="custom-file">
+        <label class="custom-file-label" for="customFile">
+          <font style="margin-left: 40px">
+            {{nomeArquivos}}
+          </font>
+        </label>
+        <input type="file" class="custom-file-input" id="customFile" (change)="selecionarArquivo($event)"
+          accept="image/*, video/*, audio/*" multiple>
+      </div>
+      <div class="input-group-append">
+        <button class="btn" type="button" (click)="fazerUpload()">Carregar</button>
+      </div>
+    </div>
+    <div class="progress" *ngIf="progress > 0">
+      <div class="progress-bar" role="progressbar" [style.width]="progress + '%'">
+        {{ progress }}%
+      </div>
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="mensagemArquivos != null"
+      style="margin-top: 10px; padding-bottom: 4px;">
+      {{ mensagemArquivos }}
+    </div>
+    <button type="submit" class="btn-save btn btn-small" (click)="enviarMensagem()">
+      <b>Enviar</b>
+    </button>
+  </form>
+  <!-- Mensagens erros -->
+  <div class="alert alert-danger mensagem" role="alert" *ngIf="mensagemEnvio">
+    {{ mensagemEnvio }}
+  </div>
+  <!--RODAPE-->
+  <div class="footer">
+    <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+      <p>Powered by <b>Triad Systems</b></p>
+    </a>
+  </div>
+</div>

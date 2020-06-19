@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div style="width: 100%;">
+      <div class="account-wall">
+        <img class="rounded mx-auto d-block" style="height: 65px;" src="assets/images/logoDfsPreto.png" alt="Logo DFS">
+        <!--FORMULARIO-->
+        <form class="form-signin needs-validation" novalidate [formGroup]="formulario">
+          <!--USUARIO-->
+          <div class="form-group">
+            <label for="usuario">Usuário</label>
+            <input type="usuario" class="form-control" id="usuario" (change)="hasError('usuario')"
+              placeholder="Digite aqui o seu usuário." formControlName="usuario">
+            <div class="invalid-feedback">
+              Informe um usuário.
+            </div>
+          </div>
+          <!--SENHA-->
+          <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" id="senha" placeholder="Digite aqui a sua senha de acesso."
+              formControlName="senha" (change)="hasError('senha')">
+            <div class="invalid-feedback">
+              Informe uma senha.
+            </div>
+            <small id="senhaHelp" class="form-text" style="text-align: right; cursor: pointer;">
+              <a (click)="recuperarSenha();">Esqueceu a senha ? </a>
+            </small>
+          </div>
+          <!--BOTOES-->
+          <div class="text-center">
+            <button class="btn  botao_entrar" (click)="fazerLogin()">Entrar</button>
+          </div>
+        </form>
+        <!--RODAPE-->
+        <div class="footer" style="text-align: center; margin-top: 5%;">
+          <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+            <p>Powered by <b>Triad Systems</b></p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- BOTAO MODAL -->
+<button type="button" style="display: none;" id="btnModalValidacao" class="btn btn-primary" data-toggle="modal"
+  data-target="#modalValidacao">
+  .
+</button>
+<!-- MODAL MENSAGEM -->
+<div class="modal fade" id="modalValidacao" tabindex="-1" role="dialog" aria-labelledby="modalValidacaoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmaSairLabel">DFS Field Service</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{mensagemValidacao}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Repetir</button>
+        <button type="button" class="btn btn-primary" (click)="recuperarSenha();" data-dismiss="modal">Recuperar
+          acesso</button>
+      </div>
+    </div>
+  </div>
+</div>

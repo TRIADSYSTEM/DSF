@@ -1,0 +1,169 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <a class="icon-left" (click)="voltarHome()" style="cursor: pointer">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h6 class="title" *ngIf="formularioDinamico != null"> {{ formularioDinamico.nomeFormulario }} </h6>
+    <h6 class="title" *ngIf="formularioDinamico == null"> Formulário </h6>
+  </div>
+  <hr class="row">
+</div>
+<!-- CAMINHO DE PAO -->
+<nav aria-label="breadcrumb" *ngIf="formularioDinamico != null">
+  <ol class="breadcrumb position tamanhoFonte">
+    <li class="breadcrumb-item position-route" style="cursor: pointer"><a (click)="voltarHome()">Home</a></li>
+    <li class="breadcrumb-item"><a> {{ formularioDinamico.nomeFormulario }}</a></li>
+  </ol>
+</nav>
+<!--CONTEUDO DA PAGINA-->
+<div class="alert alert-danger m-2 tamanhoFonte" role="alert" *ngIf="msgErro" style="text-align: justify;">
+  <i class="fa fa-times-circle-o"></i>
+  {{ msgErro }}
+</div>
+<div style="padding: 1.5%;" id="top" *ngIf="pronto">
+  <!--IMAGEM FORMULARIO-->
+  <div *ngIf="formularioDinamico != null">
+    <img src="{{ formularioDinamico.caminhoLogo }}" class="center img-responsive rounded mx-auto d-block">
+    <hr />
+  </div>
+  <!--FORMULARIO -->
+  <form class="form-signin needs-validation" [formGroup]="formulario" novalidate *ngIf="pronto">
+    <div class="form-group tamanhoFonte" *ngFor="let campo of campos">
+      <!--CAMPO INPUT-->
+      <div *ngIf="campo.tpCampo == 'text'">
+        <label>{{ campo.label }}</label>
+        <input type="{{campo.tpCampo}}" class="form-control" id="{{campo.nmCampo}}" formControlName="{{campo.nmCampo}}"
+          (change)="validarCampo(campo.nmCampo)">
+        <div class="invalid-feedback">
+          O campo {{ campo.label }} é inválido.
+        </div>
+      </div>
+      <!--CAMPO RADIO BUTTON-->
+      <div *ngIf="campo.tpCampo == 'radio'">
+        <label>{{ campo.label }}</label>
+        <div class="form-check" *ngFor="let opcao of campo.listaOpcoes, let i = index">
+          <!--Verifica id do primeiro indice -->
+          <input class="form-check-input" type="radio" name="{{campo.nmCampo}}" (change)="validarCampo(campo.nmCampo)"
+            id="{{campo.nmCampo}}" value="{{opcao}}" formControlName='{{campo.nmCampo}}' *ngIf=" i == 0">
+          <!--Verifica id do primeiro indice -->
+          <input class="form-check-input" type="radio" name="{{campo.nmCampo}}" (change)="validarCampo(campo.nmCampo)"
+            id="{{campo.nmCampo}}{{i}}" value="{{opcao}}" formControlName='{{campo.nmCampo}}' *ngIf=" i > 0">
+          <label class="form-check-label">
+            {{ opcao }}
+          </label>
+          <div class="invalid-feedback">
+            O campo {{ campo.label }} é inválido.
+          </div>
+        </div>
+      </div>
+      <!--CAMPO CHECKBOX-->
+      <div *ngIf="campo.tpCampo == 'checkbox'">
+        <label>{{ campo.label }}</label>
+        <div class="form-check" *ngFor="let opcao of campo.listaOpcoes, let i = index">
+          <input class="form-check-input" type="checkbox" value="{{opcao}}" id="{{campo.nmCampo}}{{i}}"
+            (change)="marcarCheckBox(opcao, campo.nmCampo)">
+          <label class="form-check-label" for="{{opcao}}">
+            {{ opcao }}
+          </label>
+          <div class="invalid-feedback">
+            Selecione pelo menos um item.
+          </div>
+        </div>
+      </div>
+      <!--CAMPO DATA-->
+      <div *ngIf="campo.tpCampo == 'date' || campo.tpCampo == 'datetime'">
+        <label>{{ campo.label }}</label>
+        <input type="text" placement="top" id="{{campo.nmCampo}}" class="form-control" bsDatepicker #dp="bsDatepicker"
+          [bsConfig]="bsConfig" (change)="validarCampo(campo.nmCampo)" formControlName='{{campo.nmCampo}}'>
+        <div class="invalid-feedback">
+          Uma data deve ser informada.
+        </div>
+      </div>
+      <!--TEXTO INFORMATIVO-->
+      <div *ngIf="campo.tpCampo == 'description'">
+        <div [innerHTML]="campo.descricao | sanitizeHtml"></div>
+      </div>
+      <!--CAMPO NUMERICO-->
+      <div *ngIf="campo.tpCampo == 'number'">
+        <label>{{ campo.label }}</label>
+        <input type="{{campo.tpCampo}}" class="form-control" id="{{campo.nmCampo}}"
+          (change)="validarCampo(campo.nmCampo)" formControlName='{{campo.nmCampo}}'>
+        <div class="invalid-feedback">
+          O campo {{ campo.label }} é inválido.
+        </div>
+      </div>
+      <!--CAMPO SELECT-->
+      <div *ngIf="campo.tpCampo == 'select'">
+        <label>{{ campo.label }}</label>
+        <select id="{{campo.nmCampo}}" class="form-control" (change)="validarCampo(campo.nmCampo)"
+          formControlName='{{campo.nmCampo}}'>
+          <option value="">Selecione</option>
+          <option *ngFor="let item of campo.listaOpcoes" value="{{item}}">
+            {{item}}
+          </option>
+        </select>
+        <div class="invalid-feedback">
+          Por favor, selecione uma opção.
+        </div>
+      </div>
+      <!--CAMPO MULTI SELECT-->
+      <div *ngIf="campo.tpCampo == 'multiselect'">
+        <label>{{ campo.label }}</label>
+        <select id="{{campo.nmCampo}}" class="form-control" multiple formControlName='{{campo.nmCampo}}'>
+          <option *ngFor="let item of campo.listaOpcoes" value="{{item}}">
+            {{item}}
+          </option>
+        </select>
+      </div>
+      <!--CAMPO AREA TEXTO-->
+      <div *ngIf="campo.tpCampo == 'textarea'">
+        <label>{{ campo.label }}</label>
+        <textarea class="form-control" id="{{campo.nmCampo}}" formControlName='{{campo.nmCampo}}' rows="3"
+          maxlength="250"></textarea>
+        <div class="invalid-feedback">
+          É necessário infomar o campo {{campo.label}}.
+        </div>
+      </div>
+      <!--CAMPO UPLOAD ARQUIVO-->
+      <div *ngIf="campo.tpCampo == 'file'">
+        <label>{{ campo.label }}</label>
+        <input type="{{campo.tpCampo}}" class="form-control-file" id="{{campo.nmCampo}}"
+          (change)="selecionarArquivo($event, campo.nmCampo)" accept="image/*">
+        <img class="img-responsive mt-2" [src]="" id="{{campo.nmCampo}}Preview" style="max-height: 150px;">
+      </div>
+      <!--IMAGEM SALVA NA BASE-->
+      <div *ngIf="campo.tpCampo == 'image'">
+        <div class="container">
+          <div class="row">
+            <label>{{ campo.label }}</label>
+            <div class="w-100"></div>
+            <img [src]='carregarImagem(campo.encodeImage)' class="img-responsive mt-2" style="max-height: 250px;" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--BOTOES-->
+    <div style="text-align: end;">
+      <button type="button" class="btn mr-2" (click)="voltarHome()">Voltar</button>
+      <button type="button" id="btnReenviar" class="btn mr-2" *ngIf="formularioDinamico.idFormulario != null"
+        (click)="reenviarEmail()">Reenviar</button>
+      <button type="button" id="btnReabrir" class="btn mr-2" *ngIf="formularioDinamico.idFormulario != null"
+        (click)="confirmarReabrir()">Reabrir</button>
+      <button type="button" id="btnEnviar" class="btn mr-2" (click)="confirmarEmail()"
+        *ngIf="formularioDinamico.idFormulario == null">Salvar</button>
+    </div>
+  </form>
+  <div class="alert alert-success mt-3" role="alert" *ngIf="msgSucesso">
+    {{ msgSucesso }} Recarregando a página......
+  </div>
+  <div class="alert alert-danger mt-3" role="alert" *ngIf="msgValidacaoAnexo">
+    {{ msgValidacaoAnexo }}
+  </div>
+  <!--RODAPE-->
+  <div class="footer">
+    <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+      <p>Powered by <b>Triad Systems</b></p>
+    </a>
+  </div>
+</div>

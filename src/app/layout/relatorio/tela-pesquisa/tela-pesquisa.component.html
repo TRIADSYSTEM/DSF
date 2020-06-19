@@ -1,0 +1,283 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <a class="icon-left" (click)="voltarHome()" style="cursor: pointer">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h6 class="title"> Relatórios </h6>
+  </div>
+  <hr class="row">
+</div>
+<!-- CAMINHO DE PAO -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb position tamanhoFonte">
+    <li class="breadcrumb-item position-route" style="cursor: pointer"><a (click)="voltarHome()">Home</a></li>
+    <li class="breadcrumb-item"><a> Relatórios </a></li>
+  </ol>
+</nav>
+<!--MENSAGEM ACESSO NEGADO-->
+<div id="notfound" class="text-center tamanhoFonte" *ngIf="acessoNegado">
+  <div class="notfound">
+    <div class="notfound-404">
+      <h1>403</h1>
+    </div>
+    <h2>Acesso negado</h2>
+    <p>Você não tem permissão para acessar esta área ou funcionalidade do sistema.</p>
+  </div>
+</div>
+<!--DADOS DA TELA-->
+<div *ngIf="!acessoNegado">
+  <div class="container mt-3">
+    <form class="tamanhoFonte" [formGroup]="formulario">
+      <!-- COLUNAS -->
+      <div class="container">
+        <div class="row">
+          <!--DATA INICIO-->
+          <div class="col">
+            <div class="form-group row">
+              <label for="dataInicio" class="col-sm-3 col-form-label">Data início *:</label>
+              <input [bsConfig]="bsConfig" placement="bottom" class="campo-data" id='dataInicio' bsDatepicker
+                #dataInicio="bsDatepicker" readonly formControlName="dataInicio" (click)="limparDadosTabela()">
+              <button class="calendario" (click)="dataInicio.show(); limparDadosTabela()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <!--DATA FINAL-->
+          <div class="col">
+            <div class="form-group row">
+              <label for="dataFinal" class="col-sm-3 col-form-label">Data final *:</label>
+              <input [bsConfig]="bsConfig" placement="bottom" class="campo-data" id='dataFinal'
+                (click)="limparDadosTabela()" bsDatepicker #dataFinal="bsDatepicker" readonly
+                formControlName="dataFinal">
+              <button class="calendario" (click)="dataFinal.show(); limparDadosTabela()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <!-- ESPACO -->
+          <div class="w-100"></div>
+          <!--NUMERO DO CHAMADO-->
+          <div class="col">
+            <div class="form-group row">
+              <label for="nmChamado" class="col-sm-2 col-form-label">N°Chamado:</label>
+              <div class="col-sm-10">
+                <input type="text" class="estilo-campos" id="nmChamado" (change)="limparDadosTabela()"
+                  (keyup)="validarNumero($event.target.value)" formControlName="nmChamado">
+              </div>
+            </div>
+          </div>
+          <!-- RADIO TIPO CHAMADO -->
+          <div class="col" style="height: 10px; z-index: 1;">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label">Tipo *: </label>
+              <div class="col-sm-8">
+                <div class="form-check">
+                  <input class="ajuste_margem" type="radio" name="tpChamado" id="gridRadios0" value="T"
+                    formControlName="tpChamado" (change)="limparDadosTabela()">
+                  <label class="form-check-label" for="gridRadios0">
+                    Todos
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="ajuste_margem" type="radio" name="tpChamado" id="gridRadios1" value="A"
+                    formControlName="tpChamado" (change)="limparDadosTabela()">
+                  <label class="form-check-label" for="gridRadios1">
+                    Atendimento
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="ajuste_margem" type="radio" name="tpChamado" id="gridRadios2" value="V"
+                    formControlName="tpChamado" (change)="limparDadosTabela()">
+                  <label class="form-check-label" for="gridRadios2">
+                    Vistória
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="ajuste_margem" type="radio" name="tpChamado" id="gridRadios3" value="I"
+                    formControlName="tpChamado" (change)="limparDadosTabela()">
+                  <label class="form-check-label" for="gridRadios3">
+                    Instalação
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ESPACO -->
+          <div class="w-100"></div>
+          <!-- SELECIONE O GRUPO -->
+          <div class="col">
+            <div class="form-group row">
+              <label for="grupoChamado" class="col-sm-2 col-form-label">Grupo:</label>
+              <div class="col-sm-10">
+                <select class="estilo-campos" id="grupoChamado" (change)="limparDadosTabela()"
+                  formControlName="grupoChamado">
+                  <option value="-1">Todos</option>
+                  <option *ngFor="let grupo of listaGrupo" value="{{grupo.id}}">{{ grupo.name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col"></div>
+          <!-- ESPACO -->
+          <div class="w-100"></div>
+          <!-- SELECIONE O ENTIDADE -->
+          <div class="col">
+            <div class="form-group row">
+              <label for="entidadeChamado" class="col-sm-2 col-form-label">Entidade:</label>
+              <div class="col-sm-10">
+                <select class="estilo-campos" id="entidadeChamado" formControlName="entidade"
+                  (change)="carregarLocalizacao(); limparDadosTabela()" [attr.disabled]="carregandoLoc ? '' : null">
+                  <option value="-1">Todas</option>
+                  <option *ngFor="let entidade of listaEntidade" value="{{entidade.id}}">{{ entidade.name }}</option>
+                </select>
+                <span style="position: absolute; margin-top: -2%;" *ngIf="carregandoLoc">
+                  <div class="lds-hourglass"></div>
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- SELECIONE O LOCALIZACAO -->
+          <div class="col">
+            <div class="form-group row" *ngIf="listaLocalizacao?.length != 0">
+              <label for="localizacaoChamado" class="col-sm-2 col-form-label"> Localização: </label>
+              <div class="col-sm-10">
+                <select class="estilo-campos" id="localizacaoChamado" (change)="limparDadosTabela()"
+                  formControlName="localizacao">
+                  <option value="-1">Todas</option>
+                  <option *ngFor="let local of listaLocalizacao" value="{{local.id}}">{{ local.name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- ESPACO -->
+          <div class="w-100"></div>
+          <div class="col">
+            <div style="color: red; font-size: 0.7em;">
+              * Campos obrigatórios.
+            </div>
+          </div>
+          <div class="col" style="text-align: right;">
+            <!-- BOTOES PESQUISA -->
+            <button class="btn btn-sm mr-2" (click)="limpar()">Limpar</button>
+            <button class="btn btn-sm" (click)="consultar()" [disabled]="msgConsulta">Consultar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- MENSAGEM VALIDACAO CONSULTA -->
+  <div class="alert alert-danger mt-2" role="alert" *ngIf="msgConsulta">
+    {{ msgConsulta }}
+  </div>
+  <!-- DETALHES INFORMACOES -->
+  <div class="container mt-3 tamanhoFonte" *ngIf="totalCustor > 0">
+    <div class="row">
+      <div class="col">
+        Entidade: {{ exibeEntidade() }}
+      </div>
+      <div class="col">
+        Total de Chamados: {{ totalCustor }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        Localização: {{ exibirLocalizacao() }}
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+  </div>
+  <!-- TABELA listaCusto -->
+  <div class="mt-3 tamanhoFonte" style="overflow: auto;" *ngIf="listaCusto?.length != 0">
+    <table class="table table-striped tamanhoFonte" id="tabela" style="text-align: center;">
+      <thead>
+        <tr>
+          <th scope="col">Chamado</th>
+          <th scope="col">Status</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Data Serviço</th>
+          <th scope="col">Título</th>
+          <th scope="col">Grupo</th>
+          <th scope="col">Val. Serviço</th>
+          <th scope="col">Val. Deslocamento</th>
+          <th scope="col">Val. Material</th>
+          <th scope="col">Custo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let custo of listaCusto">
+          <th scope="row">{{ custo.idChamado }}</th>
+          <th scope="row">
+            <div class="status" [ngClass]="{novo_solucionado : custo.statusChamado == 1 || custo.statusChamado == 5,
+              planejado_atribuido : custo.statusChamado == 2 || custo.statusChamado == 3,
+              pendente : custo.statusChamado == 4, fechado : custo.statusChamado == 6 }" style="margin: auto;">
+            </div>
+          </th>
+          <th scope="row">{{ carregarTipo(custo.tpServico) }}</th>
+          <th scope="row"> {{ custo.dtServico | date: 'dd/MM/yy HH:mm' }} </th>
+          <th scope="row"> {{ custo.tituloChamado }} </th>
+          <th scope="row"> {{ custo.nmGrupo }} </th>
+          <th scope="row"> {{ custo.vlServico | currency:'BRL':'symbol':'0.2':'pt'}} </th>
+          <th scope="row"> {{ custo.vlTotalKM | currency:'BRL':'symbol':'0.2':'pt'}} </th>
+          <th scope="row"> {{ custo.vlMaterial | currency:'BRL':'symbol':'0.2':'pt'}} </th>
+          <th scope="row"> {{ custo.vlTotal | currency:'BRL':'symbol':'0.2':'pt'}} </th>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="9" style="text-align: end;">Total: </td>
+          <td>{{ valorTotal | currency:'BRL':'symbol':'0.2':'pt' }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <!-- LEGENDA STATUS-->
+  <div>
+    <div class="container tamanhoFonte" *ngIf="listaCusto?.length != 0">
+      <div class="row">
+        <div class="col-sm mt-1" style="display: flex;">
+          <div class="status novo_solucionado mr-2"></div>
+          <font>Novo / Solucionado</font>
+        </div>
+        <div class="col-sm mt-1" style="display: flex;">
+          <div class="status planejado_atribuido mr-2"></div>
+          <font>Planejado / Atribuido</font>
+        </div>
+        <div class="col-sm mt-1" style="display: flex;">
+          <div class="status pendente mr-2"></div>
+          <font>Pendente</font>
+        </div>
+        <div class="col-sm mt-1" style="display: flex;">
+          <div class="status fechado mr-2"></div>
+          <font>Fechado</font>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- BOTOES TABELA -->
+  <div class="container mt-2" *ngIf="listaCusto?.length != 0">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col" style="text-align: right;">
+        <button type="button" class="btn btn-sm" (click)="baixarPDF()">
+          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+          Download
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- MENSAGEM RETORNO CONSULTA VAZIA -->
+  <div class="alert alert-warning mt-3 " role="alert" *ngIf="msgCusto">
+    {{ msgCusto }}
+  </div>
+</div>
+<!--RODAPE-->
+<div class="footer">
+  <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+    <p>Powered by <b>Triad Systems</b></p>
+  </a>
+</div>

@@ -1,0 +1,54 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <a class="icon-left" (click)="voltarHome()" style="cursor: pointer">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h6 class="title"> Formulário listar </h6>
+  </div>
+  <hr class="row">
+</div>
+<!-- CAMINHO DE PAO -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb position tamanhoFonte">
+    <li class="breadcrumb-item position-route" style="cursor: pointer"><a (click)="voltarHome()">Home</a></li>
+    <li class="breadcrumb-item"><a> Formulário listar </a></li>
+  </ol>
+</nav>
+<div class="tamanhoFonte">
+  <div class="form-group has-search" style="margin-top: 1%;">
+    <input type="number" class="form-control" (input)="buscarChamado($event.target.value)"
+      placeholder="Informe o Id do chamado" *ngIf="listaFormulario?.length != 0">
+  </div>
+  <!--LISTA-->
+  <div class="row" *ngIf="returnedArray != null">
+    <div class="col-xs-12 col-12">
+      <div>
+        <div class="content-item" *ngFor="let content of returnedArray, let i = index"
+          id="form{{ listaFormulario[i].idFormulario }}" style="margin-top: 0.2%;">
+          <div [innerHTML]="content | sanitizeHtml" (click)="carregarFormulario(listaFormulario[i].idFormulario)">
+          </div>
+        </div>
+      </div>
+      <!--PAGINACAO-->
+      <div style="margin-top: 1%; float: right; color: red;" *ngIf="contentArray?.length > 10">
+        <pagination [totalItems]="contentArray.length" (pageChanged)="pageChanged($event)" previousText="Anterior"
+          nextText="Próximo"></pagination>
+      </div>
+    </div>
+  </div>
+  <!--LISTA VAZIA-->
+  <div class="alert alert-warning" role="alert" *ngIf="listaFormulario?.length == 0">
+    Não há formulários finalizados para serem exibidos.
+  </div>
+  <!--LISTA VAZIA BUSCA-->
+  <div class="alert alert-warning" role="alert" *ngIf="this.contentArray?.length == 0 && listaFormulario?.length != 0">
+    Desculpe, não conseguimos localizar formulários para o chamado pesquisado.
+  </div>
+  <!--RODAPE-->
+  <div class="footer">
+    <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+      <p>Powered by <b>Triad Systems</b></p>
+    </a>
+  </div>
+</div>

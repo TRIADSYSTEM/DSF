@@ -1,0 +1,30 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
+  <div class="list-group">
+    <div class="lateral-cor">
+      Jayden Bartels
+    </div>
+    <a [routerLink]="['/home']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <i class="fa fa-home"></i>&nbsp;
+      <span>Home</span>
+    </a>
+    <a [routerLink]="['/formulario/listar']" routerLinkActive="router-link-active"
+      [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <i class="fa fa-list-alt"></i>&nbsp;
+      <span>Formulários</span>
+    </a>
+    <a [routerLink]="['/configuracao']" routerLinkActive="router-link-active"
+      [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="menuAvancado">
+      <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp;
+      <span>Configurações</span>
+    </a>
+    <a [routerLink]="['/relatorio']" routerLinkActive="router-link-active" [routerLinkActive]="['router-link-active']"
+      class="list-group-item" *ngIf="menuAvancado">
+      <i class="fa fa-calculator"></i>&nbsp;
+      <span>Relatórios</span>
+    </a>
+    <a href="javascript:void(0);" class="list-group-item" (click)="fazerLogout()">
+      <i class="fa fa-times-circle"></i>&nbsp;
+      <span>Sair</span>
+    </a>
+  </div>
+</nav>

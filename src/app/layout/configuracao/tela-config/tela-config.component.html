@@ -1,0 +1,46 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <a class="icon-left" (click)="voltarHome()" style="cursor: pointer">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <h6 class="title"> Configurações </h6>
+  </div>
+  <hr class="row">
+</div>
+<!-- CAMINHO DE PAO -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb position tamanhoFonte">
+    <li class="breadcrumb-item position-route" style="cursor: pointer"><a (click)="voltarHome()">Home</a></li>
+    <li class="breadcrumb-item"><a> Configurações </a></li>
+  </ol>
+</nav>
+<!--MENSAGEM ACESSO NEGADO-->
+<div id="notfound" class="text-center tamanhoFonte" *ngIf="acessoNegado">
+  <div class="notfound">
+    <div class="notfound-404">
+      <h1>403</h1>
+    </div>
+    <h2>Acesso negado</h2>
+    <p>Você não tem permissão para acessar esta área ou funcionalidade do sistema.</p>
+  </div>
+</div>
+<!-- DADOS DA TELA -->
+<div class="tamanhoFonte" *ngIf="!acessoNegado">
+  <div class="form-group mt-3">
+    <label>Utilize esta página para executar as operações manualmente.</label>
+  </div>
+  <button type="button" class="btn mt-2 ml-2 tamanhoFonte" (click)="carregarFormulario()">Carga
+    Formulários</button>
+  <button type="button" class="btn mt-2 ml-2 tamanhoFonte" (click)="aprovarChamados()">Aprovação de chamados</button>
+  <div class="alert alert-success mt-5" role="alert" *ngIf="exibirMsg">
+    O comando para executar a tarefa solicitada foi enviado com sucesso. Para acompanhar a operação utilize os logs da
+    aplicação.
+  </div>
+</div>
+<!--RODAPE-->
+<div class="footer">
+  <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+    <p>Powered by <b>Triad Systems</b></p>
+  </a>
+</div>

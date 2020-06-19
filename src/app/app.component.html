@@ -1,0 +1,13 @@
+<!--TELA PRINCIPAL-->
+<div>
+  <!--BARRA DE NAVEGACAO -->
+  <app-header *ngIf="mostrarMenu"></app-header>
+  <app-sidebar (collapsedEvent)="receiveCollapsed($event)" *ngIf="mostrarMenu"></app-sidebar>
+  <section class="main-container" [ngClass]="{collapsed: collapedSideBar, logado: mostrarMenu}">
+    <router-outlet></router-outlet>
+    <ngx-spinner bdOpacity=0.9 bdColor="rgba(51,51,51,0.9)" size="medium" color="#f4eb69" type="ball-beat"
+      [fullScreen]="true">
+      <p style="color: white"> Carregando... </p>
+    </ngx-spinner>
+  </section>
+</div>

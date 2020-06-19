@@ -1,0 +1,57 @@
+.card {
+  margin: 13px 0px 13px 0px;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.4);
+}
+
+.card-header {
+  background-color: #f7f7f7;
+  padding: 0px;
+}
+
+.card-body {
+  padding: 10px 15px 10px 15px;
+}
+
+.vermelho {
+  color: red;
+}
+
+.indexCarregando {
+  position: relative;
+  z-index: 1;
+}
+
+.margin-botom {
+  margin-bottom: 5%;
+}
+
+.texto-alinhamento {
+  text-align: right;
+}
+
+.fonte-botoes {
+  color: white;
+  font-size: 0.9em;
+}
+
+@media (min-width: 1024px) {
+  .tela {
+    margin-left: -30%;
+  }
+
+  .carregando {
+    margin-left: -15%;
+    margin-top: 75%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .tela {
+    margin-left: -20%;
+  }
+
+  .carregando {
+    margin-left: -10%;
+    margin-top: 15%;
+  }
+}

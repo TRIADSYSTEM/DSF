@@ -1,0 +1,231 @@
+<!--TITULO DA PAGINA-->
+<div class="header-title">
+  <div class="row">
+    <h6 class="title">Sistema de Chamados - Field Service | Bem-vindo </h6>
+  </div>
+  <hr class="row">
+</div>
+<!--CONTEUDO DA PAGINA-->
+<div style="padding: 1.5%;" id="top">
+  <!--CARD COM OS DADOS DO USUARIO-->
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="nameEmployee">
+          <p *ngIf="home != undefined">{{home.nome}}</p>
+        </div>
+        <div class="dateAccess">
+          <p>{{home.dataAtual | date: 'dd/MM/yyyy'}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="info-company">
+        <p class="name-company" *ngIf="home != undefined">{{home.loja}}</p>
+        <p class="address-company" *ngIf="home != undefined">
+          <b>Endereço:</b>
+          {{home.endereco}},
+          {{home.cidade}} - {{home.uf}},
+          {{home.cep}}. {{home.complemento}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!--CARD COM AGENDAMENTOS NAO CONFIRMADOS-->
+  <div class="card text-center">
+    <div class="card-header">
+      <div class="tituloAgendamento">
+        <p>Agendamentos não confirmados</p>
+      </div>
+    </div>
+    <!--EXIBE QUANDO NAO HA CHAMADOS -->
+    <div class="card-body infoCard" style="margin: 1%;" *ngIf="agendaNaoConfirmado?.length == 0"
+      class="alert alert-warning" role="alert">
+      Não existem agendamentos para confirmação nesta data.
+    </div>
+    <div class="card-body infoCard" *ngFor="let agenda of agendaNaoConfirmado, let i = index">
+      <details class="default square" [open]="carregarExpansivo(i)">
+        <!-- CABECALHO -->
+        <summary class="cabecalhoCard">
+          {{agenda.dataAbertura | date: 'dd/MM/yyyy' }}
+        </summary>
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-7 col-xs-6">
+              <div class="cardDadosAgenda">
+                <p class="negrito">Chamado: {{agenda.idChamado}} </p>
+                <p>
+                  <font class="negrito">Título:</font> {{agenda.tituloChamado}}
+                </p>
+                <p>
+                  <font class="negrito">Serviço: </font> {{agenda.tipoServico}}
+                </p>
+                <p>
+                  <font class="negrito">Cliente:</font> {{agenda.cliente}}
+                </p>
+              </div>
+              <div class="cardEnderecoAgenda">
+                <p>
+                  <font class="negrito">Endereço:</font> {{agenda.endereco}}
+                </p>
+                <p>{{agenda.cidade}} - {{agenda.estado}} ,{{agenda.cep}} </p>
+                <!--Dados telefone-->
+                <div style="font-size: 0.9em;">
+                  <p *ngIf="agenda.telefone != ''">
+                    <font class="negrito">Telefone:</font> {{agenda.telefone}}
+                  </p>
+                  <p *ngIf="agenda.telefoneAlternativo != ''">
+                    <font class="negrito">Telefone Alternativo: </font>{{agenda.telefoneAlternativo}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-5 col-xs-6">
+              <div row align-items-center justify-content-center>
+                <div style="text-align: center;">
+                  <!-- HORARIO  -->
+                  <li class="list-group-item corCard">
+                    <label for="usuario">Horário:</label><br>
+                    <label for="usuario">{{agenda.horario | date: 'HH:mm' }}</label>
+                  </li>
+                  <!-- BOTOES  -->
+                  <li class="list-group-item corCard">
+                    <button class="btn btn-success btn-sm" style="color: white; margin-right: 4%;"
+                      (click)="confirmarAgendamento(agenda.idChamado);">Confirmar</button>
+                    <button class="btn btn-sm btn-danger" style="color: white;"
+                      (click)="reagendarAgendamento(agenda.idChamado);">Reagendar</button>
+                  </li>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+  <!--CARD COM AGENDAMENTOS CONFIRMADOS-->
+  <div class="card text-center">
+    <div class="card-header">
+      <div class="tituloAgendamento">
+        <p>Agendamentos confirmados</p>
+      </div>
+    </div>
+    <!--EXIBE QUANDO HA CHAMADOS -->
+    <div class="card-body infoCard" style="margin: 1%;" *ngIf="agendaConfirmado?.length == 0"
+      class="alert alert-warning" role="alert">
+      Não existem agendamentos confirmados.
+    </div>
+    <div class="card-body infoCard" *ngFor="let agenda of agendaConfirmado, let i = index">
+      <details class="default square" [open]="carregarExpansivo(i)">
+        <!-- CABECALHO -->
+        <summary class="cabecalhoCard">
+          {{agenda.dataAbertura | date: 'dd/MM/yyyy' }}
+        </summary>
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-7 col-xs-6">
+              <div class="cardDadosAgenda">
+                <p class="negrito">
+                  Chamado: {{agenda.idChamado}}
+                  <a (click)="abrirChat(agenda.idChamado)">
+                    <i class="space-icon fa fa-commenting icons-mody"></i>
+                  </a>
+                </p>
+                <p>
+                  <font class="negrito">Título:</font> {{agenda.tituloChamado}}
+                </p>
+                <p>
+                  <font class="negrito">Serviço: </font> {{agenda.tipoServico}}
+                </p>
+                <p>
+                  <font class="negrito">Cliente:</font> {{agenda.cliente}}
+                </p>
+              </div>
+              <div class="cardEnderecoAgenda">
+                <p>
+                  <font class="negrito">Endereço:</font> {{agenda.endereco}}
+                </p>
+                <p>{{agenda.cidade}} - {{agenda.estado}} ,{{agenda.cep}} </p>
+                <!--Dados telefone-->
+                <div style="font-size: 0.9em;">
+                  <p *ngIf="agenda.telefone != '' && agenda.telefone != null">
+                    <font class="negrito">Telefone:</font> {{agenda.telefone}}
+                  </p>
+                  <p *ngIf="agenda.telefoneAlternativo != '' && agenda.telefoneAlternativo != null">
+                    <font class="negrito">Telefone Alternativo: </font>{{agenda.telefoneAlternativo}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-5 col-xs-6">
+              <div row align-items-center justify-content-center>
+                <div style="text-align: center;">
+                  <!-- HORARIO  -->
+                  <li class="list-group-item corCard">
+                    <label for="usuario">Horário:</label><br>
+                    <label for="usuario">{{agenda.horario | date: 'HH:mm'}}</label>
+                  </li>
+                  <!-- BOTOES  -->
+                  <li class="list-group-item corCard">
+                    <button class="btn btn-danger btn-sm" style="color: white; margin-right: 4%;"
+                      (click)="reagendarAgendamento(agenda.idChamado);">Reagendar</button>
+                    <!--CHAMADO TIPO ATENDIMENTO-->
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioAtendimento == 0  && agenda.tipo == 1" disabled>Atendimento</button>
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioAtendimento != 0  && agenda.tipo == 1"
+                      (click)="carregarFormularioInstalacao(agenda.idChamado, agenda.idFormularioAtendimento)">Atendimento</button>
+                    <!--CHAMADO TIPO VISTORIA-->
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioVistoria == 0 && agenda.tipo == 2" disabled>Vistoria</button>
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioVistoria != 0  && agenda.tipo == 2"
+                      (click)="carregarFormularioInstalacao(agenda.idChamado, agenda.idFormularioVistoria)">Vistoria</button>
+                    <!--CHAMADO TIPO VISTORIA-->
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioInstalacao == 0 && agenda.tipo == 3" disabled>Instalação</button>
+                    <button class="btn btn-success btn-sm" style="color: white;"
+                      *ngIf="agenda.idFormularioInstalacao != 0  && agenda.tipo == 3"
+                      (click)="carregarFormularioInstalacao(agenda.idChamado, agenda.idFormularioInstalacao)">Instalação</button>
+                  </li>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>
+<!--RODAPE-->
+<div class="footer">
+  <a href="http://triadsystems.com.br/" target="_blank">
+    <p>Powered by <b>Triad Systems</b></p>
+  </a>
+</div>
+
+<!-- BOTAO MODAL -->
+<button type="button" style="display: none;" id="btnModalValidacao" class="btn btn-primary" data-toggle="modal"
+  data-target="#modalValidacao">
+  .
+</button>
+<!-- MODAL MENSAGEM -->
+<div class="modal fade" id="modalValidacao" tabindex="-1" role="dialog" aria-labelledby="modalValidacaoLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalValidacaoLabel">DFS Field Service</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ mensagemValidacao }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: OpenSans;
+  src: url(assets/fonte/OpenSans-Regular.ttf) format("opentype");
+}
+
+body {
+  background-color: #ffde00;
+  font-family: "OpenSans", "arial", sans-serif;
+}
+
+.cor_fundo {
+  background-color: #ffde00;
+  border: none;
+}
+
+.buttons-home {
+  color: #fff;
+  padding: 10px 40px 0px 40px;
+}
+
+.botao_entrar {
+  border: 1px solid black !important;
+  background-color: #fff;
+  color: black;
+  font-weight: bold;
+}
+
+.botao_entrar:hover {
+  background-color: black;
+  color: white;
+}
+
+.btn {
+  color: black;
+}
+
+.btn-primary {
+  border-color: #fd0;
+  background-color: #fd0;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: rgb(224, 194, 0);
+}
+
+.btn-secondary {
+  border-color: #fd0;
+  background-color: #fff;
+  font-weight: bold;
+}
+
+.btn-secondary:hover {
+  background-color: rgb(224, 194, 0);
+}
+
+.alert-warning {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.footer {
+  position: inherit;
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 0.9em;
+}

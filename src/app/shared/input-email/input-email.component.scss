@@ -1,0 +1,55 @@
+.font_emails {
+  font-size: 0.8em;
+}
+
+.box {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.box input {
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  padding: 5px;
+  width: 90%;
+}
+
+.box .button {
+  border-color: rgb(58, 58, 60);
+  background-color: rgb(58, 58, 60);
+  color: white;
+  font-weight: bold;
+  border: none;
+  float: right;
+  padding: 5px 10px;
+}
+
+input[type="text"]:disabled {
+  background: white;
+}
+
+.box .buttonRemove {
+  background: none;
+  color: black;
+  font-weight: bold;
+  border: none;
+  float: right;
+  padding: 5px 10px;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #262727;
+  border-color: #262727;
+}
+
+.btn {
+  border-color: rgb(58, 58, 60);
+  background-color: rgb(58, 58, 60);
+  color: white;
+}
+
+.btn:hover {
+  background-color: rgb(125, 125, 133);
+}

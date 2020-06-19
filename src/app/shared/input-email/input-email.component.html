@@ -1,0 +1,41 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="fechar()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p>Confirme o e-mail para enviarmos o formulário e a aprovação do serviço.</p>
+      <form [formGroup]="formulario">
+        <div class="box">
+          <input type="email" id="email" #valorAtual placeholder="nome@exemplo.com" formControlName="email">
+          <button type="submit" class="button" (click)="adicionarEmail(valorAtual.value)"> + </button>
+        </div>
+      </form>
+      <!--LISTA DE E-MAIL SELECIONADOS-->
+      <div class="mt-2 font_emails" *ngIf="listaEmails?.length > 0">
+        <label>E-mail (s) selecionado(s).</label>
+        <ul class="list-group" *ngFor="let email of listaEmails">
+          <div class="box">
+            <li class="list-group-item">
+              <input type="text" [value]="email" disabled>
+              <button type="submit" class="buttonRemove" (click)="removerEmail(email)">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>
+            </li>
+          </div>
+        </ul>
+      </div>
+      <!--MENSAGEM E-MAIL-->
+      <div class="alert alert-warning mt-2" role="alert" *ngIf="listaEmails?.length == 0">
+        Deve ser informado pelo menos um e-mail.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="enviar()"
+      [disabled]="listaEmails?.length == 0 ? 'disabled': ''">Enviar</button>
+  </div>
+</div>

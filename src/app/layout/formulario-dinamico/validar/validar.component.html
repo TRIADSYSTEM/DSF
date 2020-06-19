@@ -1,0 +1,85 @@
+<div class="container">
+  <!--FORMULARIO PARA INFORMAR O E-MAIL-->
+  <div class="row align-items-center justify-content-center tela" style="margin-top: 10%;">
+    <div class="card" style="width: 70vh;">
+      <!--LOGO DFS-->
+      <div class="card-header">
+        <img src="assets/images/logoDfsPreto.png" style="height: 65px;" class="rounded mx-auto d-block">
+      </div>
+      <div class="card-body">
+        <form [formGroup]="formulario" novalidate>
+          <!-- DADOS CHAMADO -->
+          <div class="form-group" *ngIf="!mensagemErro">
+            <label class="margin-botom" style="font-size: 0.9em;">
+              Você Aprova/Reprova o atendimento do chamado
+              <font style="font-weight: bold;"> {{ validaLink?.idChamado }}</font>.
+            </label>
+            <!-- APROVACAO DO CHAMADO -->
+            <div *ngIf="!exibeReprovacao">
+              <!-- BOTOES -->
+              <div class="texto-alinhamento">
+                <button class="btn btn-danger fonte-botoes" style="margin-right: 5px;"
+                  (click)="exibirCamposReprocacao()">
+                  Reprovar
+                </button>
+                <button class="btn btn-success fonte-botoes" (click)="confirmar()">
+                  Aprovar
+                </button>
+              </div>
+            </div>
+            <!-- REPROVACAO DO CHAMADO -->
+            <div *ngIf="exibeReprovacao">
+              <label>Informe o motivo da reprovação:</label>
+              <textarea class="form-control" id="mensagemReprovacao" rows="3" formControlName="comentarioReprovacao">
+              </textarea>
+              <!-- BOTOES -->
+              <div class="texto-alinhamento" style="margin-top: 2%;">
+                <button class="btn btn-dark fonte-botoes" style="margin-right: 5px;" (click)="exibirCamposReprocacao()">
+                  Voltar
+                </button>
+                <button class="btn btn-danger fonte-botoes" (click)="reprovar()">
+                  Reprovar
+                </button>
+              </div>
+              <div class="alert alert-danger" role="alert" style="margin-top: 2%;" *ngIf="validacaoFormulario">
+                O motivo da reprovação deve ser informado.
+              </div>
+            </div>
+          </div>
+          <!-- MENSAGEM ERRO -->
+          <div class="alert alert-warning" role="alert" *ngIf="mensagemErro">
+            Este link não é válido, isso pode estar acontecendo pelos seguintes motivos:<br>
+            - O chamado já foi Aprovado/Reprovado/Reaberto.<br>
+            - O link expirou. (O link é valido por 24 horas).<br>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--RODAPE-->
+  <div class="footer tela" style="text-align: center; margin-top: 5%;">
+    <a href="http://triadsystems.com.br/" target="_blank" style="color: black;">
+      <p>Powered by <b>Triad Systems</b></p>
+    </a>
+  </div>
+</div>
+<button type="button" id="modal" class="btn btn-primary" data-toggle="modal" data-target="#confirmaReabrir"
+  style="display: none;">.</button>
+
+<!-- MODAL -->
+<div class="modal fade" id="confirmaReabrir" tabindex="-1" role="dialog" aria-labelledby="confirmaReabrirLabel"
+  aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmaReabrirLabel">DFS Field Service</h5>
+      </div>
+      <div class="modal-body">
+        {{ mensagemConfirmacao }}
+        <div style="text-align: center; font-size: 1.2em;">
+          Redirecionado em <font id="tempoRestante"> {{ contador }} </font>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
